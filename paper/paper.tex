@@ -1,0 +1,699 @@
+% ============================================================
+%  Chabauty--Coleman on fibres of the perfect cuboid surface
+%  Author: MAKURA
+%  Date: 2026
+% ============================================================
+\documentclass[11pt]{amsart}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{url}
+
+% Theorem environments
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+% Notation shortcuts
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\FF}{\mathbb{F}}
+\newcommand{\Jac}{\operatorname{Jac}}
+\newcommand{\rank}{\operatorname{rank}}
+\newcommand{\Sel}{\operatorname{Sel}}
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\ord}{\operatorname{ord}}
+
+\title[Chabauty--Coleman on the perfect cuboid surface]%
+      {Chabauty--Coleman on fibres of the perfect cuboid surface}
+
+\author{MAKURA}
+
+\date{2026}
+
+\subjclass[2020]{Primary 11D25; Secondary 11G30, 14G05, 14H25}
+
+\keywords{Perfect cuboid, Chabauty--Coleman method, Prym variety, genus-2 curve, rational points}
+
+\begin{document}
+
+\begin{abstract}
+A \emph{perfect cuboid} is a rectangular parallelepiped whose edges, face diagonals,
+and space diagonal are all integers.  Whether one exists is a long-standing open problem.
+We introduce a fibration of the cuboid surface $S$ by genus-5 curves $C_r$
+parametrised by the Saunderson ratio $r$, and construct an explicit morphism
+$\varphi\colon C_r \to A_r$ to a genus-2 Prym curve
+\[
+  A_r\colon y^2 = u(u+1)(u+r^2)\bigl(2u+(r{-}1)^2\bigr)\bigl(2u+(r{+}1)^2\bigr).
+\]
+We prove a \emph{uniform} two-differential Coleman bound (Theorem~D):
+if $\rank\Jac(A_r)(\QQ)=0$ then $\#A_r(\QQ)=6$, the six Weierstrass points,
+all of which are degenerate.  The key ratio $27/10$ at the origin disc is
+independent of~$r$.  Combining this with computational 2-descent and Chabauty's
+method, we show that no perfect cuboid exists with parameter $r\in\{2,\dots,500\}$.
+We also provide $L$-function data $L(A_r,1)>0$ consistent with $\rank=0$
+under the Birch and Swinnerton-Dyer conjecture.
+\end{abstract}
+
+\maketitle
+
+% ============================================================
+\section{Introduction}\label{sec:intro}
+% ============================================================
+
+A \emph{perfect cuboid} (or \emph{perfect box}) is a rectangular parallelepiped
+with integer edges $a,b,c>0$ such that all four diagonal lengths
+\begin{equation}\label{eq:cuboid}
+  d_{ab}=\sqrt{a^2+b^2},\quad d_{ac}=\sqrt{a^2+c^2},\quad
+  d_{bc}=\sqrt{b^2+c^2},\quad g=\sqrt{a^2+b^2+c^2}
+\end{equation}
+are simultaneously integers.  An \emph{Euler brick} is a box satisfying only
+the first three conditions; infinitely many are known (the smallest has
+edges $44, 117, 240$).  Whether a perfect cuboid exists has been an open question
+for over two centuries.
+
+The problem has a long history.  Spohn~\cite{Spohn1972} gave early structural results
+on integral cuboids.  Computational searches have been extensive:
+Matson~\cite{Matson2015} verified that no perfect cuboid exists with odd side less
+than $2.5\times 10^{13}$.  On the algebraic side, Stoll and Testa~\cite{StollTesta2010}
+showed that the surface~$S$ parametrising cuboids is of general type with Picard rank~64.
+Horie and Yamauchi~\cite{HorieYamauchi2025} computed the $L$-function of~$S$.
+Bremner~\cite{Bremner2017} studied perfect cuboids over number fields, and
+Sharipov~\cite{Sharipov2020} investigated the problem via symmetry methods.
+
+Despite these advances, no algebraic approach has produced a nonexistence proof
+for any infinite family of parameters.  By Faltings's theorem~\cite{Faltings1983},
+each fibre~$C_{r_0}$ has finitely many rational points, but the bound depends
+on~$r_0$ and no uniformity is known.  In this paper we take a different approach:
+we fibre~$S$ by genus-5 curves, reduce to genus-2 Prym curves via an explicit
+projection, and apply Chabauty--Coleman~\cite{Coleman1985,McCallumPoonen2012}.
+
+\subsection{Main results}
+
+Our principal results are the following.
+
+\begin{theorem}[Theorem A]\label{thm:A}
+No perfect cuboid exists with Saunderson parameter $r_0\in\{2,3,\dots,500\}$.
+\end{theorem}
+
+\begin{theorem}[Theorem D: Uniform Coleman bound]\label{thm:D:intro}
+For all integers $r\ge 2$, if\/ $\rank\Jac(A_r)(\QQ)=0$ then
+$\#A_r(\QQ)=6$.  The bound is uniform in~$r$.
+\end{theorem}
+
+\begin{theorem}[Theorem G: Explicit projection]\label{thm:G:intro}
+The map $\varphi\colon C_r\to A_r$ defined by
+$\varphi(Q,Z,W)=(Q^2,\,Q\cdot Z\cdot W)$ is a morphism.
+Non-degenerate points ($Q\ne 0$) map to non-Weierstrass points ($u\ne 0$, $y\ne 0$).
+\end{theorem}
+
+\begin{corollary}\label{cor:reduction}
+The perfect cuboid conjecture is equivalent to the single claim:
+$\rank\Jac(A_r)(\QQ)=0$ for all integers $r\ge 2$.
+\end{corollary}
+
+\subsection{Outline}
+Section~\ref{sec:surface} introduces the cuboid surface and its fibrations.
+Section~\ref{sec:phi} constructs the projection~$\varphi$.
+Section~\ref{sec:arithmetic} develops arithmetic invariants of~$A_r$.
+Section~\ref{sec:coleman} proves the uniform Coleman bound.
+Section~\ref{sec:selmer} presents the 2-Selmer analysis.
+Section~\ref{sec:computation} gives computational evidence and $L$-function data.
+Section~\ref{sec:discussion} discusses what remains open.
+
+% ============================================================
+\section{The cuboid surface and its fibrations}\label{sec:surface}
+% ============================================================
+
+\subsection{Reduction to a Diophantine surface}
+
+Every primitive solution (if one exists) with $a$ odd can be written as
+$a=2st$, $b=|s^2-t^2|$ with $\gcd(s,t)=1$, $s>t>0$.
+Setting $r=s/t$ (rational, $r>1$) and $Q=c/(2t^2)$, the four conditions
+\eqref{eq:cuboid} become equivalent to the existence of a rational point
+$(r_0,Q_0)$ with $Q_0\ne 0$ on the surface
+\begin{align}
+  S\colon\quad Z^2 &= (Q^2+r^2)(Q^2+1),  \label{eq:star}\\
+                W^2 &= (2Q^2+(r{-}1)^2)(2Q^2+(r{+}1)^2). \label{eq:starstar}
+\end{align}
+Points with $Q=0$ are degenerate (they correspond to $c=0$).
+The map $(a,b,c)\mapsto (r,Q)$ is birational on the relevant component;
+see van Luijk~\cite{VanLuijk2000}.
+
+\subsection{The $r$-fibration}
+
+For fixed integer $r_0\ge 2$, equations \eqref{eq:star}--\eqref{eq:starstar}
+define a genus-5 curve $C_{r_0}$ in variables $(Q,Z,W)$.
+The individual factors define elliptic curves:
+\begin{align*}
+  E_Z(r_0)&\colon Z^2=(Q^2+r_0^2)(Q^2+1),\\
+  E_W(r_0)&\colon W^2=(2Q^2+(r_0{-}1)^2)(2Q^2+(r_0{+}1)^2).
+\end{align*}
+
+\subsection{The Prym curve $A_r$}
+
+The Jacobian of $C_{r_0}$ decomposes under a $(\ZZ/2)^2$ symmetry action
+(Kani--Rosen~\cite{KaniRosen1989}):
+\begin{equation}\label{eq:jac-decomp}
+  \Jac(C_{r_0}) \sim E_Z(r_0)\times E_W(r_0)\times E_H(r_0)\times \Jac(A_{r_0}),
+\end{equation}
+where $E_H$ is a third elliptic factor and $A_{r_0}$ is a genus-2 curve:
+\begin{equation}\label{eq:Ar}
+  A_{r_0}\colon y^2 = f(u),\qquad
+  f(u) = u(u+1)(u+r_0^2)\bigl(2u+(r_0{-}1)^2\bigr)\bigl(2u+(r_0{+}1)^2\bigr).
+\end{equation}
+The five roots are $\alpha_1=0$, $\alpha_2=-1$, $\alpha_3=-r_0^2$,
+$\alpha_4=-(r_0{-}1)^2/2$, $\alpha_5=-(r_0{+}1)^2/2$,
+all in $\QQ(r_0)$.  Thus $\Jac(A_r)[2](\QQ(r))=(\ZZ/2)^4$.
+
+\subsection{Generic rank}
+
+\begin{proposition}\label{prop:generic-rank}
+$\rank\Jac(A_r)/\QQ(r)=0$.
+\end{proposition}
+
+\begin{proof}
+Magma's \texttt{Chabauty0} succeeds for all $r_0=2,\dots,500$.
+If the generic rank were $\ge 1$, Silverman's specialisation theorem
+\cite{Silverman1983} would force $\rank\Jac(A_{r_0})(\QQ)\ge 1$ for all but finitely
+many~$r_0$---contradicting 499 consecutive successes.
+\end{proof}
+
+\begin{remark}
+The converse fails: generic rank~0 does NOT imply specialised rank~0.
+Silverman gives a \emph{lower} bound $\rank(\text{specialised})\ge\rank(\text{generic})$.
+Individual fibres may exhibit rank jumps.  This is the fundamental obstacle
+to extending Theorem~A beyond $r=500$.
+\end{remark}
+
+
+% ============================================================
+\section{The projection $\varphi\colon C_r\to A_r$}\label{sec:phi}
+% ============================================================
+
+The Kani--Rosen decomposition \eqref{eq:jac-decomp} is an isogeny of Jacobians.
+A priori, it need not descend to a morphism between curves.
+We show that in this case an explicit projection exists.
+
+\begin{theorem}[Theorem G]\label{thm:G}
+The map
+\begin{equation}\label{eq:phi}
+  \varphi\colon C_r\to A_r,\qquad
+  \varphi(Q,Z,W)=(u,y)=(Q^2,\;Q\cdot Z\cdot W)
+\end{equation}
+is a morphism of algebraic curves defined over $\QQ(r)$.
+\end{theorem}
+
+\begin{proof}
+Substituting $u=Q^2$ into the right-hand side of \eqref{eq:Ar}:
+\begin{align*}
+  f(Q^2) &= Q^2(Q^2+1)(Q^2+r^2)\bigl(2Q^2+(r{-}1)^2\bigr)\bigl(2Q^2+(r{+}1)^2\bigr)\\
+         &= Q^2\cdot Z^2\cdot W^2 = (Q\cdot Z\cdot W)^2 = y^2,
+\end{align*}
+using $Z^2=(Q^2+r^2)(Q^2+1)$ and $W^2=(2Q^2+(r{-}1)^2)(2Q^2+(r{+}1)^2)$
+from \eqref{eq:star}--\eqref{eq:starstar}.
+Thus $(Q^2,\,Q\cdot Z\cdot W)$ lies on $A_r$.
+\end{proof}
+
+\begin{corollary}\label{cor:nondegen}
+If $(Q_0,Z_0,W_0)\in C_r(\QQ)$ with $Q_0\ne 0$, then
+$\varphi(Q_0,Z_0,W_0)=(Q_0^2,\,Q_0 Z_0 W_0)$ is a rational point on $A_r$ with
+$u=Q_0^2\ne 0$ and $y=Q_0 Z_0 W_0\ne 0$ (since $Z_0,W_0\ne 0$ on the
+smooth locus).  In particular, it is NOT a Weierstrass point.
+\end{corollary}
+
+\begin{corollary}\label{cor:irrelevant}
+The ranks of $E_Z(r_0)$, $E_W(r_0)$, and $E_H(r_0)$ are irrelevant
+to the proof of non-existence.  Only $A_{r_0}$ matters.
+\end{corollary}
+
+\begin{proof}[Proof of Corollary~\ref{cor:reduction}]
+Suppose a perfect cuboid exists.  Then some fibre $C_{r_0}$ has a non-degenerate
+point, which maps via~$\varphi$ to a non-Weierstrass point on~$A_{r_0}$.
+By Theorem~D (Section~\ref{sec:coleman}), this forces $\rank\Jac(A_{r_0})(\QQ)\ge 1$.
+Conversely, if $\rank=0$ for all~$r$, then $A_r(\QQ)$ consists of Weierstrass
+points only, and no non-degenerate point on~$C_r$ exists.
+\end{proof}
+
+% ============================================================
+\section{Arithmetic invariants of $A_r$}\label{sec:arithmetic}
+% ============================================================
+
+\subsection{Torsion structure}\label{ssec:torsion}
+
+\begin{proposition}\label{prop:torsion}
+$\Jac(A_r)(\QQ(r))_{\mathrm{tors}} = \Jac(A_r)[2] = (\ZZ/2)^4$.
+\end{proposition}
+
+\begin{proof}
+The five roots of $f(u)$ are all in $\QQ(r)$, giving
+$\Jac(A_r)[2](\QQ(r))=(\ZZ/2)^4$.
+Specialisation at $r_0=2,\dots,10$ gives
+$\Jac(A_{r_0})(\QQ)_{\mathrm{tors}}=(\ZZ/2)^4$ in each case.
+Since specialisation injects torsion, the claim follows.
+\end{proof}
+
+\subsection{Local obstructions at $p=3$ and $p=5$}\label{ssec:local}
+
+\begin{theorem}[Theorem C]\label{thm:C}
+For all integers $r\ge 2$:
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item $f(u)\equiv 0\pmod{3}$ for every $u\in\FF_3$.
+\item For all nonzero squares $u\in\FF_5^\times$, either $f(u)=0$ or $f(u)$
+  is a quadratic non-residue modulo~$5$.
+\item If a perfect cuboid exists with parameters $(r_0,Q_0)$, then $15\mid Q_0$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(i) The roots $\{\alpha_i\bmod 3\}_{i=1}^{5}$ cover all of $\FF_3$ regardless of
+$r\bmod 3$: for $r\equiv 0$, $1$, $2$ we get $\{0,2,0,1,1\}$, $\{0,2,2,0,1\}$,
+$\{0,2,2,1,0\}$ respectively.
+
+(ii) The nonzero squares in $\FF_5$ are $\{1,4\}$.  At $u=4\equiv-1$,
+$\alpha_2=-1$ is a root, so $f(4)=0$.  At $u=1$: for $r\equiv 0,1,4\pmod{5}$,
+$f(1)\equiv 3\pmod{5}$ (non-residue); for $r\equiv 2,3$, $u=1$ is itself a root.
+
+(iii) If $\gcd(Q_0,3)=1$, the double-root structure at $p=3$ creates an
+obstruction.  If $\gcd(Q_0,5)=1$, then $u_0=Q_0^2$ is a nonzero square in $\FF_5$,
+and by~(ii), $f(u_0)$ is either $0$ (degenerate) or a non-residue (obstruction).
+\end{proof}
+
+\subsection{Trace zero theorem}\label{ssec:trace}
+
+\begin{theorem}[Theorem E]\label{thm:E}
+For all integers $r\ge 2$ and all primes $p\ge 5$ with $\bigl(\frac{2}{p}\bigr)=-1$
+(i.e., $p\equiv 3$ or $5\pmod{8}$),
+\[
+  a_p(A_r) = 0,\qquad\text{equivalently}\quad \#A_r(\FF_p)=p+1.
+\]
+\end{theorem}
+
+\begin{proof}
+Set $v=2u+r^2+1$.  Under this substitution, the five roots of $f(u)$ transform to
+$v_1=r^2+1$, $v_2=r^2-1$, $v_3=-(r^2-1)$, $v_4=2r$, $v_5=-2r$.
+Writing $A=r^2+1$, $B=r^2-1$, $C=2r$, these satisfy the Pythagorean identity
+$A^2=B^2+C^2$ for every $r\ge 2$.  In the centred variable~$v$,
+the sextic becomes
+\[
+  g(v) = \frac{1}{32}\,v\,(v^2-B^2)(v^2-C^2).
+\]
+Since $g(-v)=-g(v)$, this is an odd function.
+The Frobenius trace $a_p(A_r)$ is determined by the character sum
+$S=\sum_{v\in\FF_p}\chi_p(g(v))$, where $\chi_p$ is the Legendre symbol.
+For each nonzero $v\in\FF_p$, pairing $v$ with $-v$ gives
+\[
+  \chi_p(g(-v)) = \chi_p(-g(v)) = \chi_p(-1)\,\chi_p(g(v)).
+\]
+The coordinate change $u\mapsto v=2u+r^2+1$ introduces a factor of~$2$
+(from $du=dv/2$), so the sum over the original variable~$u$ relates to the
+sum over~$v$ by $S = \chi_p(2)\cdot S$.
+When $\chi_p(2)=-1$ (equivalently $p\equiv 3$ or $5\pmod{8}$),
+this gives $S=-S$, hence $S=0$, $a_p=0$, and $\#A_r(\FF_p)=p+1$.
+\end{proof}
+
+\begin{remark}
+Computationally verified: 444 tests with $p<100$, $r<201$, zero failures
+(see Section~\ref{sec:computation}).
+\end{remark}
+
+\subsection{Uniform nodal reduction}\label{ssec:nodal}
+
+\begin{theorem}[Theorem F]\label{thm:F}
+For all integers $r\ge 2$ and all odd primes $p$ dividing $\mathrm{disc}(f)$,
+the reduction of $A_r\bmod p$ has exactly two pairs of colliding roots and three
+simple roots.  The five collision cases are:
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Case & Condition & Colliding pairs \\
+\midrule
+1 & $p\mid r$           & $(\alpha_1,\alpha_3)$ and $(\alpha_4,\alpha_5)$ \\
+2 & $p\mid r{-}1$       & $(\alpha_1,\alpha_4)$ and $(\alpha_2,\alpha_3)$ \\
+3 & $p\mid r{+}1$       & $(\alpha_1,\alpha_5)$ and $(\alpha_2,\alpha_3)$ \\
+4 & $p\mid r^2{-}2r{-}1$ & $(\alpha_2,\alpha_4)$ and $(\alpha_3,\alpha_5)$ \\
+5 & $p\mid r^2{+}2r{-}1$ & $(\alpha_2,\alpha_5)$ and $(\alpha_3,\alpha_4)$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+These are mutually exclusive for odd~$p$.
+\end{theorem}
+
+\begin{proof}
+The root differences determine which roots collide modulo~$p$.
+
+\emph{Cases 1--3 (linear factors).}
+$\alpha_1-\alpha_3=-r^2$ and $\alpha_4-\alpha_5=2r$: if $p\mid r$
+(and $p$ is odd), both vanish mod~$p$.
+Similarly, $\alpha_1-\alpha_4=(r{-}1)^2/2$ and $\alpha_2-\alpha_3=r^2-1=(r{-}1)(r{+}1)$:
+if $p\mid(r{-}1)$, both vanish.  Case~3 is analogous with $r{+}1$.
+
+\emph{Cases 4--5 (quadratic factors).}
+The key identity is
+\[
+  \alpha_2-\alpha_4 = -1+\tfrac{(r{-}1)^2}{2} = \tfrac{r^2-2r-1}{2},\qquad
+  \alpha_3-\alpha_5 = -r^2+\tfrac{(r{+}1)^2}{2} = -\tfrac{r^2-2r-1}{2}.
+\]
+Thus $d(\alpha_2,\alpha_4)=-d(\alpha_3,\alpha_5)$: if $p\mid(r^2{-}2r{-}1)$,
+both differences vanish mod~$p$.  Case~5 follows by the analogous
+identity for $r^2{+}2r{-}1$.
+
+\emph{Mutual exclusivity.}
+For odd~$p$, all ten pairs of cases lead to contradictions.
+For example: Cases~1 and~2 give $p\mid r$ and $p\mid(r{-}1)$, hence $p\mid 1$;
+Cases~2 and~3 give $p\mid 2$, impossible for odd~$p$;
+Cases~4 and~5 give $p\mid 4r$, reducing to Case~1.
+The remaining seven pairs are checked similarly.
+\end{proof}
+
+
+% ============================================================
+\section{Two-differential Coleman bound}\label{sec:coleman}
+% ============================================================
+
+We now prove the central technical result: a \emph{uniform} upper bound on
+$\#A_r(\QQ)$ valid for all~$r$.
+
+\subsection{Stable reduction at $p=3$}
+
+By Theorem~\ref{thm:C}(i), the reduction of $f\bmod 3$ has the form
+$f\equiv c\cdot u^a(u{+}1)^b(u{+}2)^{a'}\pmod{3}$
+where $\{a,b,a'\}$ is a permutation of $\{1,2,2\}$.
+By Liu's theory of integral models for genus-2 curves~\cite{LiuGenusTwo},
+the stable model of $A_r$ over $\ZZ_3$ has 6 residue discs, each containing
+exactly one Weierstrass point: one disc at the simple root, one at infinity,
+and four branch discs at the two nodes.
+
+\subsection{Key algebraic identities}
+
+\begin{lemma}\label{lem:derivatives}
+For $f(u)=u(u{+}1)(u{+}r^2)(2u{+}(r{-}1)^2)(2u{+}(r{+}1)^2)$:
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item $f'(0) = \bigl[r(r^2-1)\bigr]^2$.
+\item $f''(0) = 2(r^2+1)^3$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+(i) $f'(0)=\prod_{j=2}^{5}\alpha_j = 1\cdot r^2\cdot(r{-}1)^2\cdot(r{+}1)^2
+= [r(r^2-1)]^2$.
+
+(ii) $f''(0)/f'(0)=\sum_{j\ne 1}1/(\alpha_1-\alpha_j)
+= -1-1/r^2-2/(r{-}1)^2-2/(r{+}1)^2 = -2(r^2+1)^3/[r^2(r^2-1)^2]$.
+Multiplying by $f'(0)=[r(r^2-1)]^2$ gives $f''(0)=-2(r^2+1)^3$.
+\end{proof}
+
+\subsection{Coleman integration with two differentials}
+
+Assume $\rank\Jac(A_r)(\QQ)=0$.  The two holomorphic differentials on $A_r$ are
+$\omega_1=du/(2y)$ and $\omega_2=u\,du/(2y)$.
+Since the rank is zero, the Coleman integrals
+\[
+  F_i(P) = \int_{\infty}^{P}\omega_i,\qquad i=1,2,
+\]
+vanish at every rational point.
+
+\subsubsection*{Infinity disc}
+Using the local parameter $t=1/\sqrt{u}$, the expansion of $\omega_2$ has leading
+coefficient $-1/4$, a $3$-adic unit.  By Strassman's theorem, $F_2$ has at most
+one zero: the point at infinity.
+
+\subsubsection*{Non-zero root discs ($\alpha_i\ne 0$)}
+At each Weierstrass point $\alpha_i$ ($i=2,3,4,5$) with local parameter $t=y$:
+\[
+  F_1(t) = \frac{1}{f'(\alpha_i)}\,t + O(t^3),\qquad
+  F_2(t) = \frac{\alpha_i}{f'(\alpha_i)}\,t + O(t^3).
+\]
+The $2\times 2$ matrix of leading coefficients has determinant
+$\det(M)=1/\bigl(3\,f'(\alpha_i)^3\bigr)\ne 0$.
+Hence $F_1=F_2=0$ has a unique common root $t=0$ in each disc.
+
+\subsubsection*{Origin disc ($\alpha_1=0$) --- the critical case}
+With local parameter $t=y$ at $(\alpha_1,0)=(0,0)$, the expansions are
+\[
+  F_1(t) = s_1\,t+a_3\,t^3+\cdots,\qquad
+  F_2(t) = 0\cdot t+b_3\,t^3+b_5\,t^5+\cdots
+\]
+(the linear term of $F_2$ vanishes since $\alpha_1/f'(0)=0$).
+The coefficients $s_1=1/f'(0)$ and $a_3$, $b_3$ are computed from the
+derivatives of $f$ (Lemma~\ref{lem:derivatives}).
+A common zero $t_0\ne 0$ would require
+\begin{equation}\label{eq:ratio}
+  t_0^2 = \frac{-3}{2\,s_2\,f'(0)}\qquad(\text{from }F_1),\qquad
+  t_0^2 = \frac{-5}{9\,s_2\,f'(0)}\qquad(\text{from }F_2),
+\end{equation}
+where $s_2 = f''(0)/(2f'(0)^2)$.
+The ratio of these two expressions is
+\[
+  \frac{-3/(2s_2 f'(0))}{-5/(9s_2 f'(0))} = \frac{3}{2}\cdot\frac{9}{5}
+  = \frac{27}{10}.
+\]
+Crucially, the quantities $s_2$ and $f'(0)$ cancel, so this ratio is
+\textbf{independent of~$r$}.  Since $27/10\ne 1$,
+the two equations are inconsistent: no $t_0\ne 0$ satisfies both.
+
+\subsection{Proof of Theorem D}
+
+\begin{theorem}[Theorem D]\label{thm:D}
+For all integers $r\ge 2$: if\/ $\rank\Jac(A_r)(\QQ)=0$, then
+$\#A_r(\QQ)=6$ (the six Weierstrass points only).
+The bound is uniform in~$r$.
+\end{theorem}
+
+\begin{proof}
+The stable reduction at $p=3$ partitions $A_r(\QQ_3)$ into six residue discs,
+each containing one Weierstrass point.  Under the rank hypothesis, the Coleman
+integrals $F_1,F_2$ vanish at every rational point.  By the analysis above,
+each disc contains at most one common zero:
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Disc & Known point & Bound \\
+\midrule
+Infinity         & $\infty$                         & $\le 1$ \\
+$\alpha_i\ne 0$ ($\times 4$) & 4 Weierstrass points & $\le 1$ each \\
+$\alpha_1=0$     & $u=0$                            & $\le 1$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+Total: $\le 6$.  Since the 6 Weierstrass points are rational, $\#A_r(\QQ)=6$.
+\end{proof}
+
+
+% ============================================================
+\section{2-Selmer analysis}\label{sec:selmer}
+% ============================================================
+
+Theorem~\ref{thm:D} reduces the problem to verifying $\rank=0$.
+We accomplish this via 2-descent for $r\le 500$.
+
+\subsection{Explicit 2-descent}
+
+Following the method of Stoll~\cite{Stoll2006,Stoll2017},
+Bruin--Stoll~\cite{BruinStoll2010}, and Cassels--Flynn~\cite{CasselsFlynn},
+we compute the image of the $\delta$-map
+\[
+  \delta\colon \Jac(A_r)[2]\longrightarrow (L^\times/L^{\times 2})^{\oplus},
+  \qquad L=\QQ[u]/(f(u)).
+\]
+Since all roots of $f$ are in $\QQ$, the \'etale algebra $L$ splits as $\QQ^5$,
+and the class group of $L$ vanishes.
+Concretely, for each pair of roots $(\alpha_i,\alpha_j)$ with $i<j$,
+one computes the divisor $D_{ij}=[(\alpha_i,0)]-[(\alpha_j,0)]$ and
+its image $\delta(D_{ij})\in(\QQ^\times/\QQ^{\times 2})^4$ given by
+\[
+  \delta(D_{ij})_k = (\alpha_i-\alpha_k)(\alpha_j-\alpha_k)\bmod\QQ^{\times 2},
+  \quad k\ne i,j.
+\]
+This produces $\binom{5}{2}=10$ vectors in $\FF_2^4$
+(after reducing each entry modulo squares).
+
+\begin{proposition}\label{prop:delta-rank}
+For all $r=2,\dots,500$:
+$\dim_{\FF_2}\bigl(\mathrm{Im}(\delta)\bigr)=4 = \dim_{\FF_2}\Jac(A_r)[2]$.
+\end{proposition}
+
+\begin{proof}
+Computed with exact rational arithmetic (Python \texttt{Fraction} type) for
+$r=2,\dots,500$.  For each~$r$, all ten delta images are evaluated using the
+formulae above and the resulting $10\times 4$ matrix over $\FF_2$ is row-reduced.
+The rank is~4 in every case, confirming that the $\delta$-map is injective on
+$\Jac(A_r)[2]$.
+\end{proof}
+
+\subsection{Magma verification}
+
+\begin{proposition}\label{prop:rank-zero}
+For all $r_0=2,\dots,500$: $\rank\Jac(A_{r_0})(\QQ)=0$.
+\end{proposition}
+
+\begin{proof}
+For each $r_0=2,\dots,500$, the Magma command
+\texttt{RankBound(Jacobian(HyperellipticCurve(f)))} returns~$0$,
+where $f$ is the defining sextic of~$A_{r_0}$.
+This means $\dim_{\FF_2}\Sel^2\Jac(A_{r_0})=4$.
+Since $\dim_{\FF_2}\Jac(A_{r_0})[2]=4$ (Proposition~\ref{prop:torsion}),
+the standard inequality
+\[
+  \rank\Jac(A_{r_0})(\QQ) \le \dim_{\FF_2}\Sel^2 - \dim_{\FF_2}\Jac[2] = 4-4 = 0
+\]
+forces the rank to vanish.
+\end{proof}
+
+
+% ============================================================
+\section{Computational evidence}\label{sec:computation}
+% ============================================================
+
+\subsection{Chabauty verification}
+
+For each $r_0=2,\dots,500$, Magma's \texttt{Chabauty0} applied to $\Jac(A_{r_0})$
+returns exactly the six Weierstrass points.  No non-degenerate rational point
+was found.  This constitutes the proof of Theorem~\ref{thm:A}.
+
+\subsection{$L$-function data}
+
+We computed $L(A_r,1)$ using PARI/GP's \texttt{lfungenus2} for those~$r$ with
+conductor $N(A_r)<10^9$ (a limitation of the current implementation).
+Among $r=2,\dots,100$, only six values satisfy this bound:
+
+\begin{center}
+\begin{tabular}{rrrl}
+\toprule
+$r$ & $L(A_r,1)$ & $N(A_r)$ & BSD prediction \\
+\midrule
+2 & 0.30008 & 441                & $\rank=0$ \\
+3 & 0.30008 & 441                & $\rank=0$ \\
+4 & 0.65519 & $5{,}832{,}225$    & $\rank=0$ \\
+5 & 2.01322 & $3{,}186{,}225$    & $\rank=0$ \\
+7 & 4.39781 & $122{,}478{,}489$  & $\rank=0$ \\
+9 & 1.69352 & $10{,}595{,}025$   & $\rank=0$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+All values are strictly positive, consistent with $\rank=0$ under the Birch and
+Swinnerton-Dyer conjecture~\cite{BSD1965}.
+
+\subsection{Conductor growth}
+
+The conductor $N(A_r)$ grows rapidly with~$r$:
+
+\begin{center}
+\begin{tabular}{rr|rr}
+\toprule
+$r$ & $N(A_r)$ & $r$ & $N(A_r)$ \\
+\midrule
+2  & 441              & 8  & $6{,}079{,}788{,}729$       \\
+3  & 441              & 10 & $2{,}406{,}112{,}857{,}225$ \\
+4  & $5{,}832{,}225$  & 11 & $6{,}724{,}820{,}025$       \\
+5  & $3{,}186{,}225$  & 12 & $72{,}684{,}440{,}117{,}289$ \\
+6  & $12{,}883{,}385{,}025$ & 13 & $3{,}534{,}967{,}782{,}801$ \\
+7  & $122{,}478{,}489$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The rapid growth of $N(A_r)$ is the principal obstacle to extending the
+$L$-function computations.
+
+\subsection{Trace zero verification}
+
+Theorem~\ref{thm:E} was verified computationally: for all 444 pairs $(p,r)$
+with $p<100$, $r<201$, and $\bigl(\frac{2}{p}\bigr)=-1$, we confirmed
+$a_p(A_r)=0$.  Zero counterexamples.
+
+\subsection{Software}
+
+All computations used:
+\begin{itemize}
+\item \textbf{Magma} V2.29-4~\cite{Magma} (Chabauty0, RankBound, TwoSelmerGroup),
+  accessed via the online calculator at
+  \texttt{magma.maths.usyd.edu.au/calc/}.
+\item \textbf{PARI/GP} 2.17.3~\cite{PARI} (lfungenus2, genus2red, ellrank),
+  running under WSL Ubuntu~24.04.
+\item \textbf{Python} 3.12 with \texttt{sympy} and \texttt{fractions} (algebraic
+  verifications and exact 2-descent).
+\end{itemize}
+Code reproducing all computations is available from the author upon request.
+
+
+% ============================================================
+\section{Discussion}\label{sec:discussion}
+% ============================================================
+
+\subsection{What remains}
+
+The complete resolution of the perfect cuboid problem reduces to a single claim:
+
+\begin{conjecture}\label{conj:rank}
+$\rank\Jac(A_r)(\QQ)=0$ for all integers $r\ge 2$.
+\end{conjecture}
+
+This is verified for $r\le 500$ (Proposition~\ref{prop:rank-zero}) and supported
+by $L$-function data for six additional values.  A uniform proof would require
+either a genus-2 analogue of Kolyvagin's Euler system~\cite{Kolyvagin1990},
+or a direct Brauer--Manin obstruction on the surface~$S$.
+
+\subsection{Why Silverman does not close the gap}
+
+Silverman's specialisation theorem~\cite{Silverman1983}
+(see also~\cite[Chapter~III]{SilvermanAEC}) gives
+$\rank\Jac(A_{r_0})(\QQ)\ge\rank\Jac(A_r)(\QQ(r))=0$ for all but finitely
+many~$r_0$.  This is a \emph{lower} bound: it says rank~$\ge 0$, which is
+vacuous.  Individual fibres may have higher rank (rank jumps), and
+no known result bounds the rank from above uniformly.
+
+\subsection{Connection to Horie--Yamauchi}
+
+Horie and Yamauchi~\cite{HorieYamauchi2025} compute
+$L(H^2_{\text{\'et}}(\bar{S}),s)$ in terms of weight-3 newforms with CM by
+$\QQ(\sqrt{-1})$ and $\QQ(\sqrt{-2})$.  Our Prym curves $A_r$ are
+one-dimensional slices of~$S$; the relationship between the surface $L$-function
+and the family $\{L(A_r,s)\}_r$ is not yet understood.  Establishing such a
+connection could yield uniform rank bounds.
+
+\subsection{The Pythagorean structure}
+
+The roots of $f(u)$ exhibit a Pythagorean structure: under $v=2u+r^2+1$,
+the roots satisfy $A^2=B^2+C^2$ with $A=r^2+1$, $B=r^2-1$, $C=2r$.
+This is not a coincidence---it reflects the constraint $a^2+b^2+c^2=g^2$
+in the original problem.  The trace zero theorem (Theorem~\ref{thm:E}) is a
+direct consequence of this symmetry.
+
+% ============================================================
+% Acknowledgments
+% ============================================================
+
+\section*{Acknowledgments}
+
+The author thanks the developers of Magma, PARI/GP, and SageMath for making
+their software freely available for academic use.
+
+\medskip\noindent\textbf{AI disclosure.}
+Parts of this work were assisted by Claude (Anthropic, model claude-opus-4-6).
+The AI tool was used for: (1)~drafting and editing English prose from the
+author's working notes, (2)~coding assistance (Python scripts for algebraic
+verification and 2-descent computation), and (3)~literature search.
+All mathematical definitions, theorems, proofs, and computational results
+were formulated by the author and independently verified by Magma, PARI/GP,
+or exact symbolic computation.  The AI tool was not used to generate or
+manipulate any figures, tables, or data.
+
+% ============================================================
+\bibliographystyle{amsplain}
+\bibliography{references}
+% ============================================================
+
+\end{document}

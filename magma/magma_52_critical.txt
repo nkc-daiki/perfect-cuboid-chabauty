@@ -1,0 +1,134 @@
+// ========================================================================
+// CRITICAL MAGMA COMPUTATION: 2-Selmer Group for Perfect Cuboid Proof
+// Submit to: http://magma.maths.usyd.edu.au/calc/
+// ========================================================================
+//
+// PURPOSE: Verify dim(Sel^2(J(A_r))) = 4 for r=2..50.
+// If dim = 4 = dim(J[2]) for all r, then rank(J) = 0 for all tested r.
+// Combined with Theorem D, this completes the proof that no perfect cuboid exists.
+//
+// ESTIMATED TIME: 5-15 minutes per batch
+//
+// ========================================================================
+// BATCH A: TwoSelmerGroup for r=2..25 (submit first)
+// ========================================================================
+
+printf "=== 2-Selmer Group Computation: r=2..25 ===\n\n";
+for r in [2..25] do
+  R<x> := PolynomialRing(Rationals());
+  f := x*(x+1)*(x+r^2)*(2*x+(r-1)^2)*(2*x+(r+1)^2);
+  C := HyperellipticCurve(f);
+  J := Jacobian(C);
+  sel := TwoSelmerGroup(J);
+  dim := Ngens(sel);
+  rb := RankBound(J);
+  if dim eq 4 then
+    printf "r=%o: dim(Sel^2) = %o = dim(J[2]), RankBound=%o => rank=0\n", r, dim, rb;
+  else
+    printf "r=%o: dim(Sel^2) = %o *** UNEXPECTED (> 4) ***, RankBound=%o\n", r, dim, rb;
+  end if;
+end for;
+printf "\nBatch A done.\n";
+
+// ========================================================================
+// BATCH B: TwoSelmerGroup for r=26..50 (submit second)
+// ========================================================================
+/*
+printf "=== 2-Selmer Group Computation: r=26..50 ===\n\n";
+for r in [26..50] do
+  R<x> := PolynomialRing(Rationals());
+  f := x*(x+1)*(x+r^2)*(2*x+(r-1)^2)*(2*x+(r+1)^2);
+  C := HyperellipticCurve(f);
+  J := Jacobian(C);
+  sel := TwoSelmerGroup(J);
+  dim := Ngens(sel);
+  rb := RankBound(J);
+  if dim eq 4 then
+    printf "r=%o: dim(Sel^2) = %o = dim(J[2]), RankBound=%o => rank=0\n", r, dim, rb;
+  else
+    printf "r=%o: dim(Sel^2) = %o *** UNEXPECTED (> 4) ***, RankBound=%o\n", r, dim, rb;
+  end if;
+end for;
+printf "\nBatch B done.\n";
+*/
+
+// ========================================================================
+// BATCH C: L-polynomial at small primes (CM/structure investigation)
+// ========================================================================
+/*
+printf "=== L-polynomial computation ===\n\n";
+for r in [2, 3, 5, 7, 10] do
+  R<x> := PolynomialRing(Rationals());
+  f := x*(x+1)*(x+r^2)*(2*x+(r-1)^2)*(2*x+(r+1)^2);
+  C := HyperellipticCurve(f);
+  printf "r=%o:\n", r;
+  for p in [11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47] do
+    if IsBadPrime(C, p) then
+      printf "  p=%o: bad prime\n", p;
+      continue;
+    end if;
+    Cp := ChangeRing(C, GF(p));
+    L := LPolynomial(Cp);
+    printf "  p=%o: L(T) = %o\n", p, L;
+  end for;
+  printf "\n";
+end for;
+printf "Batch C done.\n";
+*/
+
+// ========================================================================
+// BATCH D: Endomorphism algebra (is J simple? does it have RM?)
+// ========================================================================
+/*
+printf "=== Endomorphism algebra investigation ===\n\n";
+for r in [2, 3, 5, 7] do
+  R<x> := PolynomialRing(Rationals());
+  f := x*(x+1)*(x+r^2)*(2*x+(r-1)^2)*(2*x+(r+1)^2);
+  C := HyperellipticCurve(f);
+  J := Jacobian(C);
+  printf "r=%o:\n", r;
+
+  // Check simplicity
+  try
+    simp := IsSimple(J);
+    printf "  Simple: %o\n", simp;
+  catch e
+    printf "  IsSimple: failed\n";
+  end try;
+
+  // Endomorphism ring
+  try
+    End_alg := EndomorphismAlgebra(J);
+    printf "  EndAlg: %o\n", End_alg;
+  catch e
+    printf "  EndAlg: failed\n";
+  end try;
+
+  printf "\n";
+end for;
+printf "Batch D done.\n";
+*/
+
+// ========================================================================
+// BATCH E: RankBound for r=101..500 (extended verification)
+// ========================================================================
+/*
+printf "=== RankBound: r=101..500 ===\n\n";
+count_zero := 0;
+count_nonzero := 0;
+for r in [101..500] do
+  R<x> := PolynomialRing(Rationals());
+  f := x*(x+1)*(x+r^2)*(2*x+(r-1)^2)*(2*x+(r+1)^2);
+  C := HyperellipticCurve(f);
+  J := Jacobian(C);
+  rb := RankBound(J);
+  if rb gt 0 then
+    printf "r=%o: RankBound=%o *** CHECK ***\n", r, rb;
+    count_nonzero +:= 1;
+  else
+    count_zero +:= 1;
+  end if;
+end for;
+printf "\nRankBound=0: %o, RankBound>0: %o\n", count_zero, count_nonzero;
+printf "Batch E done.\n";
+*/

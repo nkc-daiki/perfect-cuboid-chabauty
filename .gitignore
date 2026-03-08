@@ -1,0 +1,31 @@
+# Working notes (Japanese)
+試行記録_何を試して何がダメだったか.md
+SESSION_LOG_*.md
+NEXT_SESSION_FILES.md
+結果.txt
+
+# Archive of earlier phases
+=old/
+
+# Working directories
+最初に確認/
+確認/
+
+# LaTeX build artifacts
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.synctex.gz
+*.fdb_latexmk
+*.fls
+*.toc
+
+# Python
+__pycache__/
+*.pyc
+
+# OS
+Thumbs.db
+.DS_Store
