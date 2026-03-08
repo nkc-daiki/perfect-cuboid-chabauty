@@ -1,0 +1,46 @@
+// verify_theorem_E.txt — Magma verification of Theorem E
+//
+// For A_r: y^2 = u(u+1)(u+r^2)(2u+(r-1)^2)(2u+(r+1)^2),
+// verify that a_p(A_r) = 0 and L_p(A_r, T) is a polynomial in T^2
+// whenever (2/p) = -1.
+//
+// Run at: https://magma.maths.usyd.edu.au/calc/
+// Note: 120-second time limit. Adjust R_MAX and P_MAX as needed.
+
+R_MAX := 50;   // test r = 2, ..., R_MAX
+P_MAX := 200;  // test primes up to P_MAX
+
+total := 0; fails := 0; lp_fails := 0;
+
+for r in [2..R_MAX] do
+  P<x> := PolynomialRing(Rationals());
+  f := x*(x+1)*(x+r^2)*(2*x+(r-1)^2)*(2*x+(r+1)^2);
+  C := HyperellipticCurve(f);
+  for p in PrimesInInterval(5, P_MAX) do
+    D := Integers()!Discriminant(ChangeRing(f, GF(p)));
+    if D eq 0 then continue; end if;
+    chi2 := KroneckerSymbol(2, p);
+    if chi2 ne -1 then continue; end if;
+    Cp := ChangeRing(C, GF(p));
+    Lp := LPolynomial(Cp);
+    a1 := Coefficient(Lp, 1);
+    a3 := Coefficient(Lp, 3);
+    total +:= 1;
+    if a1 ne 0 then
+      fails +:= 1;
+      printf "FAIL: r=%o p=%o a1=%o L=%o\n", r, p, a1, Lp;
+    end if;
+    if a3 ne 0 then
+      lp_fails +:= 1;
+      printf "LP_FAIL: r=%o p=%o a3=%o L=%o\n", r, p, a3, Lp;
+    end if;
+  end for;
+end for;
+
+printf "\n========================================\n";
+printf "Total (r,p) pairs tested: %o\n", total;
+printf "a_p = 0 failures:         %o\n", fails;
+printf "L_p(T^2) failures:        %o\n", lp_fails;
+if fails eq 0 and lp_fails eq 0 then
+  printf "Theorem E VERIFIED for r in [2,%o], p < %o.\n", R_MAX, P_MAX;
+end if;

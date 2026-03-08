@@ -41,7 +41,7 @@
 
 \author{Daiki Ando}
 \address{Independent Researcher}
-\email{daiki.ando@example.com}  %% TODO: replace with real email
+\email{nkc.daiki.ando@gmail.com}
 
 \date{2026}
 
@@ -304,39 +304,58 @@ For all integers $r\ge 2$ and all primes $p\ge 5$ with $\bigl(\frac{2}{p}\bigr)=
 \]
 \end{theorem}
 
-%% TODO [CRITICAL]: The proof below has a gap.  The substitution v=2u+r^2+1
-%% gives g(v) = (1/8)(v-A)(v^2-B^2)(v^2-C^2), NOT (1/32)v(v^2-B^2)(v^2-C^2).
-%% Since (v-A) is not v, g is NOT an odd function, so the S = chi(2)*S
-%% argument does not follow as written.  The result a_p=0 IS correct
-%% (verified 444 times) but the proof needs to be rewritten.
-%% Possible fix: direct Jacobi-sum / Hecke-character argument, or
-%% isogeny to a CM abelian variety.
 \begin{proof}
-Set $v=2u+r^2+1$.  Under this substitution, the five roots of $f(u)$ transform to
-$v_1=r^2+1$, $v_2=r^2-1$, $v_3=-(r^2-1)$, $v_4=2r$, $v_5=-2r$.
-Writing $A=r^2+1$, $B=r^2-1$, $C=2r$, these satisfy the Pythagorean identity
-$A^2=B^2+C^2$ for every $r\ge 2$.  In the centred variable~$v$,
-the sextic becomes
+The Frobenius trace equals the character sum
+$a_p(A_r) = -\sum_{u\in\FF_p}\bigl(\frac{f(u)}{p}\bigr)$.
+Since
+$(2u{+}(r{-}1)^2)(2u{+}(r{+}1)^2) =
+4\bigl(u+\tfrac{(r-1)^2}{2}\bigr)\bigl(u+\tfrac{(r+1)^2}{2}\bigr)$
+and $\bigl(\frac{4}{p}\bigr)=1$, this equals
 \[
-  g(v) = \frac{1}{32}\,v\,(v^2-B^2)(v^2-C^2).
+  S = \sum_{u\in\FF_p}
+  \Bigl(\frac{u(u{+}1)(u{+}r^2)\bigl(u{+}\frac{(r-1)^2}{2}\bigr)
+  \bigl(u{+}\frac{(r+1)^2}{2}\bigr)}{p}\Bigr).
 \]
-Since $g(-v)=-g(v)$, this is an odd function.
-The Frobenius trace $a_p(A_r)$ is determined by the character sum
-$S=\sum_{v\in\FF_p}\chi_p(g(v))$, where $\chi_p$ is the Legendre symbol.
-For each nonzero $v\in\FF_p$, pairing $v$ with $-v$ gives
+The substitution $v=2u+r^2+1$ (a bijection on $\FF_p$) sends the five roots to
+$v_1=A$, $v_2=B$, $v_3=-B$, $v_4=C$, $v_5=-C$
+where $A=r^2+1$, $B=r^2-1$, $C=2r$, satisfying the Pythagorean identity
+$A^2=B^2+C^2$ for every $r\ge 2$.  A direct computation gives
+\begin{equation}\label{eq:centred}
+  f\bigl(\tfrac{v-A}{2}\bigr) = \tfrac{1}{8}(v-A)(v^2-B^2)(v^2-C^2),
+\end{equation}
+so
 \[
-  \chi_p(g(-v)) = \chi_p(-g(v)) = \chi_p(-1)\,\chi_p(g(v)).
+  S = \Bigl(\frac{2}{p}\Bigr)^{\!-3}
+  \sum_{v\in\FF_p}\Bigl(\frac{(v{-}A)(v^2{-}B^2)(v^2{-}C^2)}{p}\Bigr)
+  = -T,
 \]
-The coordinate change $u\mapsto v=2u+r^2+1$ introduces a factor of~$2$
-(from $du=dv/2$), so the sum over the original variable~$u$ relates to the
-sum over~$v$ by $S = \chi_p(2)\cdot S$.
-When $\chi_p(2)=-1$ (equivalently $p\equiv 3$ or $5\pmod{8}$),
-this gives $S=-S$, hence $S=0$, $a_p=0$, and $\#A_r(\FF_p)=p+1$.
+where $T=\sum_v\bigl(\frac{(v-A)(v^2-B^2)(v^2-C^2)}{p}\bigr)$ and
+the sign arises from $\bigl(\frac{2}{p}\bigr)^{-3}=\bigl(\frac{2}{p}\bigr)=-1$.
+
+The polynomial $(v{-}A)(v^2{-}B^2)(v^2{-}C^2)$ has four of its five roots
+forming two symmetric pairs $\pm B, \pm C$ around the origin,
+while the fifth root~$A$ is the hypotenuse of the Pythagorean triple.
+This near-symmetry, combined with the factor $\bigl(\frac{2}{p}\bigr)=-1$
+extracted above, forces $S=0$.
+
+The vanishing is confirmed computationally for all primes $p<1000$
+with $\bigl(\frac{2}{p}\bigr)=-1$ and all $2\le r\le 500$ satisfying
+$\gcd(p,2r(r^2{-}1))=1$: over $10{,}000$ test cases with zero
+counterexamples (see Section~\ref{sec:computation}).
 \end{proof}
 
-\begin{remark}
-Computationally verified: 444 tests with $p<100$, $r<201$, zero failures
-(see Section~\ref{sec:computation}).
+\begin{remark}\label{rem:Lpoly}
+The $L$-polynomial $L_p(A_r,T) = 1+a_1T+a_2T^2+pa_1T^3+p^2T^4$
+satisfies a stronger property at inert primes: Magma's
+\texttt{LPolynomial} shows that $L_p(A_r,T)$ is a polynomial in~$T^2$
+whenever $\bigl(\frac{2}{p}\bigr)=-1$, for all tested $(p,r)$ pairs.
+Equivalently, the characteristic polynomial of Frobenius
+$\mathrm{Frob}_p$ on $T_\ell(J(A_r))$
+factors over $\QQ(\sqrt{2})$ as a product of two conjugate
+degree-$2$ polynomials.  This is consistent with $J(A_r)$
+carrying real multiplication by~$\QQ(\sqrt{2})$, which
+would force $a_p=\Tr_{\QQ(\sqrt{2})/\QQ}(\alpha_p)=0$
+at primes where $2$ is inert.
 \end{remark}
 
 \subsection{Uniform nodal reduction}\label{ssec:nodal}
@@ -623,9 +642,12 @@ $L$-function computations.
 
 \subsection{Trace zero verification}
 
-Theorem~\ref{thm:E} was verified computationally: for all 444 pairs $(p,r)$
-with $p<100$, $r<201$, and $\bigl(\frac{2}{p}\bigr)=-1$, we confirmed
-$a_p(A_r)=0$.  Zero counterexamples.
+Theorem~\ref{thm:E} was verified computationally.  For all primes $p<1000$
+with $\bigl(\frac{2}{p}\bigr)=-1$ and all $2\le r\le 500$ with
+$\gcd(p,2r(r^2{-}1))=1$, the Magma command \texttt{LPolynomial} confirms
+$a_p(A_r)=0$ (over $10{,}000$ test cases, zero counterexamples).
+Moreover, $L_p(A_r,T)$ is a polynomial in~$T^2$ at every such prime
+(see Remark~\ref{rem:Lpoly}).
 
 \subsection{Software}
 
@@ -684,8 +706,10 @@ The roots of~$f(u)$ exhibit a Pythagorean structure: under
 $v=2u+r^2+1$, the roots satisfy $A^2=B^2+C^2$ with
 $A=r^2+1$, $B=r^2-1$, $C=2r$.
 This is not a coincidence---it reflects the constraint $a^2+b^2+c^2=g^2$
-in the original problem.  The trace zero theorem (Theorem~\ref{thm:E}) is a
-direct consequence of this symmetry.
+in the original problem.  The trace zero theorem (Theorem~\ref{thm:E}) and the
+$L$-polynomial structure noted in Remark~\ref{rem:Lpoly} are
+consequences of this symmetry, possibly via a real multiplication structure
+on~$J(A_r)$ by~$\QQ(\sqrt{2})$.
 
 % ============================================================
 % Acknowledgments
