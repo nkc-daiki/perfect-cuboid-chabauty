@@ -11,6 +11,18 @@ NEXT_SESSION_FILES.md
 最初に確認/
 確認/
 
+# Root-level originals (organized copies are in scripts/ and magma/)
+/40_complete_proof.py
+/46_two_differential_proof.py
+/51_trace_algebraic_proof.py
+/53_selmer_theory.py
+/54_p2_local_analysis.py
+/55_full_selmer.py
+/magma_52_critical.txt
+
+# Compiled PDF (regenerate with pdflatex)
+*.pdf
+
 # LaTeX build artifacts
 *.aux
 *.bbl
